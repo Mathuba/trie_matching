@@ -25,6 +25,29 @@ def build_trie(patterns):
 		insert(tree, pattern)
 	return tree
 
+def prefix_trie_matching(text, trie):
+	i_index = 0
+	symbol = text[i_index]
+	symbol_index = GENOMICS.index(symbol)
+	current_node = trie
+	
+	while True:
+		if current_node.value is not None:
+			return current_node.value
+		elif current_node.next[symbol_index] != NA:
+			i_index += 1
+			if len(text) > i_index:
+				symbol = text[i_index]
+			elif i_index == len(text) - 1:
+				symbol = text[-1]
+			if i_index > len(text):
+				break
+			current_node = current_node.next[symbol_index]
+			symbol_index = GENOMICS.index(symbol)
+		else:
+			return False
+
+
 def solve (text, patterns):
 	result = []
 	text_length = len(text)
@@ -33,7 +56,7 @@ def solve (text, patterns):
 	for i in range(text_length):
 		found = prefix_trie_matching(text[i:], trie)
 		if found:
-			result.append(found)
+			result.append(i)
 
 	return result
 
@@ -45,6 +68,6 @@ patterns = []
 for i in range (n):
 	patterns += [sys.stdin.readline ().strip ()]
 
-ans = solve (text, n, patterns)
+ans = solve (text, patterns)
 
 sys.stdout.write (' '.join (map (str, ans)) + '\n')
