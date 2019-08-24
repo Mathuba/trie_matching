@@ -25,11 +25,15 @@ def build_trie(patterns):
 		insert(tree, pattern)
 	return tree
 
-def solve (text, n, patterns):
+def solve (text, patterns):
 	result = []
+	text_length = len(text)
 
 	trie = build_trie(patterns)
-	print("trie next at least: ", trie.next)
+	for i in range(text_length):
+		found = prefix_trie_matching(text[i:], trie)
+		if found:
+			result.append(found)
 
 	return result
 
